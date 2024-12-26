@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Translator and Speaker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text Translator and Speaker</h1>
+        <textarea id="textInput" placeholder="Enter text here"></textarea>
+        <select id="sourceLang">
+            <option value="en">English</option>
+            <option value="mr">Marathi</option>
+            <!-- Add more language options as needed -->
+        </select>
+        <select id="targetLang">
+            <option value="mr">Marathi</option>
+            <option value="en">English</option>
+            <!-- Add more language options as needed -->
+        </select>
+        <button id="translateButton">Translate</button>
+        <button id="playButton" disabled>Play Translation</button>
+        <div id="translatedText"></div>
+    </div>
+
+    <script>
+        document.getElementById('translateButton').addEventListener('click', translateText);
+        document.getElementById('playButton').addEventListener('click', playTranslation);
+
+        function translateText() {
+            const text = document.getElementById('textInput').value;
+            const fromLang = document.getElementById('sourceLang').value;
+            const toLang = document.getElementById('targetLang').value;
+
+            fetch('http://localhost:5000/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text, fromLang, toLang }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('translatedText').innerText = data.translatedText;
+                document.getElementById('playButton').disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function playTranslation() {
+            fetch('http://localhost:5000/play')
+                .then(response => response.json())
+                .then(data => {
+                    const audio = new Audio(data.audioUrl);
+                    audio.play();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
