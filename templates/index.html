@@ -4,77 +4,316 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Translator and Speaker</title>
+    <!-- Link to FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 10px;
-        }
-        select, button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
+        /* Reset some default styles for better control */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Light gradient */
+    color: #333;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Navbar Styles */
+.navbar {
+    width: 100%;
+    background-color: #007bff;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar h2 {
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.nav-links-container {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+}
+
+.nav-links li {
+    margin-right: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffdd57;
+}
+
+.menu-icon {
+    display: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.theme-toggle label {
+    color: #fff;
+    margin-left: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+#themeSwitch {
+    display: none;
+}
+
+#themeIcon {
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Dark Mode Styles */
+body.dark-theme {
+    background: linear-gradient(135deg, #2c3e50, #34495e); /* Dark gradient */
+    color: #ecf0f1;
+}
+
+body.dark-theme .container {
+    background-color: #2c3e50;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme textarea,
+body.dark-theme select,
+body.dark-theme button {
+    background-color: #34495e;
+    border-color: #7f8c8d;
+    color: #ecf0f1;
+}
+
+body.dark-theme button {
+    background-color: #1abc9c;
+}
+
+body.dark-theme button:hover {
+    background-color: #16a085;
+}
+
+body.dark-theme #translatedText {
+    background-color: #34495e;
+}
+
+/* Hide the h1 in dark mode */
+body.dark-theme #pageTitle {
+    display: none;
+}
+
+/* Mobile Responsive Navbar */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #007bff;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 10px 0;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+}
+
     </style>
 </head>
 <body>
+    <!-- Navbar with Dark Mode Toggle and Tabs -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h2 class="logo">Text Translator</h2>
+            <div class="nav-links-container">
+                <!-- Navigation Tabs -->
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#login">Login</a></li>
+                </ul>
+                <!-- Mobile Menu Toggle Button -->
+                <div class="menu-icon" id="menuIcon">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <!-- Theme Toggle -->
+            <div class="theme-toggle">
+                <label for="themeSwitch">
+                    <i id="themeIcon" class="fas fa-sun"></i> <!-- Default icon is Sun (light mode) -->
+                </label>
+                <input type="checkbox" id="themeSwitch">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Section -->
     <div class="container">
-        <h1>Text Translator and Speaker</h1>
+        <h1 id="pageTitle">Text Translator and Speaker</h1>
         <textarea id="textInput" placeholder="Enter text here"></textarea>
-        <select id="sourceLang">
-            <option value="en">English</option>
-            <option value="mr">Marathi</option>
-            <!-- Add more language options as needed -->
-        </select>
-        <select id="targetLang">
-            <option value="mr">Marathi</option>
-            <option value="en">English</option>
-            <!-- Add more language options as needed -->
-        </select>
+        <div class="lang-selectors">
+            <select id="sourceLang">
+                <option value="en">English</option>
+                <option value="mr">Marathi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="zh">Chinese</option>
+                <option value="ja">Japanese</option>
+                <option value="ko">Korean</option>
+                <option value="ar">Arabic</option>
+                <option value="hi">Hindi</option>
+                <option value="bn">Bengali</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="ur">Urdu</option>
+            </select>
+            <select id="targetLang">
+                <option value="mr">Marathi</option>
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="zh">Chinese</option>
+                <option value="ja">Japanese</option>
+                <option value="ko">Korean</option>
+                <option value="ar">Arabic</option>
+                <option value="hi">Hindi</option>
+                <option value="bn">Bengali</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="ur">Urdu</option>
+            </select>
+        </div>
+
         <button id="translateButton">Translate</button>
         <button id="playButton" disabled>Play Translation</button>
+
         <div id="translatedText"></div>
     </div>
 
     <script>
+        document.getElementById('themeSwitch').addEventListener('change', toggleTheme);
         document.getElementById('translateButton').addEventListener('click', translateText);
         document.getElementById('playButton').addEventListener('click', playTranslation);
+        document.getElementById('menuIcon').addEventListener('click', toggleMenu);
+
+        // Function to toggle between light and dark theme
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const pageTitle = document.getElementById('pageTitle');
+
+            body.classList.toggle('dark-theme'); // Toggle the dark theme on the body
+
+            // Change the theme icon (sun for light mode, moon for dark mode)
+            if (body.classList.contains('dark-theme')) {
+                icon.classList.remove('fas', 'fa-sun');
+                icon.classList.add('fas', 'fa-moon');
+                pageTitle.style.display = 'none';  // Hide h1 when in dark mode
+            } else {
+                icon.classList.remove('fas', 'fa-moon');
+                icon.classList.add('fas', 'fa-sun');
+                pageTitle.style.display = 'block'; // Show h1 when in light mode
+            }
+        }
+
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
 
         function translateText() {
             const text = document.getElementById('textInput').value;
             const fromLang = document.getElementById('sourceLang').value;
             const toLang = document.getElementById('targetLang').value;
 
-            fetch('http://localhost:5000/translate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ text, fromLang, toLang }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('translatedText').innerText = data.translatedText;
-                document.getElementById('playButton').disabled = false;
-            })
-            .catch(error => {
-                console.error('Error:', error);
+            // Split the text into smaller chunks
+            const chunks = text.match(/.{1,500}/g);
+
+            let translatedChunks = [];
+            const promises = chunks.map(chunk => {
+                return fetch('http://localhost:5000/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: chunk, fromLang, toLang })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    translatedChunks.push(data.translatedText);
+                });
             });
+
+            Promise.all(promises)
+                .then(() => {
+                    const translatedText = translatedChunks.join(' ');
+                    document.getElementById('translatedText').innerText = translatedText;
+                    document.getElementById('playButton').disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
         function playTranslation() {
