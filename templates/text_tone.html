@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <title>Text Tone Speaker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Styles.css') }}">
+    
+ 
+</head>
+
+<body>
+    <!-- Navbar -->
+      <!-- Correct way to include navbar -->
+      {% include 'navbar/navbar.html' %}
+
+    <!-- Content Section -->
+    <div class="container">
+        <h1>Text Translator and Speaker</h1>
+
+        <!-- Source and Target Language Selection -->
+
+        <div class="lang-selectors">
+            <select id="sourceLang">
+                <option value="en">English</option>
+                <option value="mr">Marathi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="zh">Chinese</option>
+                <option value="ja">Japanese</option>
+                <option value="ko">Korean</option>
+                <option value="ar">Arabic</option>
+                <option value="hi">Hindi</option>
+                <option value="bn">Bengali</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="ur">Urdu</option>
+            </select>
+</div>
+        <!-- Input Text -->
+        <textarea id="textInput" placeholder="Enter text here" required></textarea>
+
+        <!-- Target Language Selection -->
+        <div class="lang-selectors">
+            
+
+            <select id="targetLang">
+                <option value="mr">Marathi</option>
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="zh">Chinese</option>
+                <option value="ja">Japanese</option>
+                <option value="ko">Korean</option>
+                <option value="ar">Arabic</option>
+                <option value="hi">Hindi</option>
+                <option value="bn">Bengali</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="ur">Urdu</option>
+            </select>
+        </div>
+
+        <!-- Action Buttons -->
+        <button id="translateButton">Translate</button>
+
+        <!-- Progress Bar -->
+<div id="progressBarContainer" style="display:none; width: 100%; height: 10px; background-color: #f3f3f3;">
+    <div id="progressBar" style="width: 0; height: 100%; background-color: #4caf50;"></div>
+</div>
+
+           <!-- Translated Text Output -->
+           <div id="translatedText"></div>
+           
+        <!-- <button id="playButton" disabled>Play Translation</button> -->
+        <button id="playButton" style="display:none;" onclick="playTranslation()">Play Translation</button>
+
+     
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Translate Button Click Event
+    document.getElementById('translateButton').addEventListener('click', translateText);
+    // Play Button Click Event
+    document.getElementById('playButton').addEventListener('click', playTranslation);
+});
+
+// Translate Text Function
+function translateText() {
+    const text = document.getElementById('textInput').value;
+    const fromLang = document.getElementById('sourceLang').value;
+    const toLang = document.getElementById('targetLang').value;
+
+    // Hide the Play button initially
+    document.getElementById('playButton').style.display = 'none';
+
+    // Show the progress bar
+    document.getElementById('progressBarContainer').style.display = 'block';
+
+    // Set the progress bar to 0% initially
+    const progressBar = document.getElementById('progressBar');
+    progressBar.style.width = '0%';
+
+    // Simulate a delay to show the progress bar moving, you can adjust the timing based on actual API latency
+    let progress = 0;
+    const interval = setInterval(() => {
+        if (progress < 90) {
+            progress += 5; // Increase progress by 5% each time
+            progressBar.style.width = progress + '%';
+        } else {
+            clearInterval(interval); // Stop the progress bar once it's near 100%
+        }
+    }, 200); // Adjust the timing to match the speed of your backend
+
+    fetch('http://localhost:5000/translate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: text, fromLang: fromLang, toLang: toLang })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Hide the progress bar once translation is complete
+        document.getElementById('progressBarContainer').style.display = 'none';
+
+        // Show the translated text
+        document.getElementById('translatedText').innerText = data.translatedText;
+
+        // Show the Play button because translation is complete
+        document.getElementById('playButton').style.display = 'inline-block';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Hide the progress bar in case of an error
+        document.getElementById('progressBarContainer').style.display = 'none';
+    });
+}
+
+// Play Translation Audio Function
+function playTranslation() {
+    fetch('http://localhost:5000/play')
+    .then(response => response.json())
+    .then(data => {
+        const audio = new Audio(data.audioUrl);
+        audio.play();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+    </script>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const modeIcon = document.getElementById('mode-icon');
+        const body = document.body;
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            if (body.classList.contains('dark-theme')) {
+                modeIcon.src = 'moon-icon.png'; // Switch to moon icon for dark mode
+            } else {
+                modeIcon.src = 'sun-icon.png'; // Switch to sun icon for light mode
+            }
+        });
+
+        // Navbar Toggle (Mobile View)
+        const navbarToggle = document.getElementById('navbar-toggle');
+        const navbarLinks = document.querySelector('.navbar-links');
+
+        navbarToggle.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>

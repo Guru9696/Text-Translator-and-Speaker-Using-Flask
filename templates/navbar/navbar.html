@@ -1,0 +1,57 @@
+   <!-- Navbar -->
+   <nav class="navbar">
+    <div class="navbar-brand">
+        <a href="#">Translator.io</a>
+    </div>
+    <div class="navbar-links">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li id="servicesMenu">
+                <a href="#">Services</a>
+                <ul>
+                    <li><a href="{{ url_for('tourist_tongue') }}">Tourist Tongue</a></li>
+                    <li><a href="{{ url_for('text_tone') }}">Text Tone</a></li>
+                    <li><a href="{{ url_for('global_translate') }}">Global Translate</a></li>
+                    <li><a href="{{ url_for('digital') }}">Digital</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Login</a></li>
+        </ul>
+    </div>
+
+    <div class="theme-toggle">
+        <label for="themeSwitch">
+            <i id="themeIcon" class="fas fa-sun"></i> <!-- Default icon is Sun (light mode) -->
+        </label>
+        <input type="checkbox" id="themeSwitch">
+    </div>
+</nav>
+
+<script>
+document.getElementById('themeSwitch').addEventListener('change', toggleTheme);
+ 
+    // Function to toggle between light and dark theme
+ 
+    // Function to toggle between light and dark theme
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('themeIcon');
+        const pageTitle = document.getElementById('pageTitle');
+
+        body.classList.toggle('dark-theme'); // Toggle the dark theme on the body
+
+        // Change the theme icon (sun for light mode, moon for dark mode)
+        if (body.classList.contains('dark-theme')) {
+            icon.classList.remove('fas', 'fa-sun');
+            icon.classList.add('fas', 'fa-moon');
+            pageTitle.style.display = 'none';  // Hide h1 when in dark mode
+        } else {
+            icon.classList.remove('fas', 'fa-moon');
+            icon.classList.add('fas', 'fa-sun');
+            pageTitle.style.display = 'block'; // Show h1 when in light mode
+        }
+    }
+
+</script>

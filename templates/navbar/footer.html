@@ -1,0 +1,39 @@
+Navbar
+<nav class="navbar">
+    <div class="navbar-brand">
+        <a href="#">MySite</a>
+    </div>
+    <div class="navbar-links">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Login</a></li>
+        </ul>
+    </div>
+    
+    <div class="navbar-toggle" id="navbar-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="theme-toggle">
+        <label for="themeSwitch">
+            <i id="themeIcon" class="fas fa-sun"></i> <!-- Default icon is Sun (light mode) -->
+        </label>
+        <input type="checkbox" id="themeSwitch">
+    </div>
+    
+</nav>
+<script>
+    document.querySelectorAll("li > a").forEach(function (menuItem) {
+        menuItem.addEventListener("click", function (event) {
+            var subMenu = this.nextElementSibling;
+            if (subMenu && subMenu.tagName === "UL") {
+                event.preventDefault(); // Prevent the default action (if it's a link)
+                subMenu.style.display = (subMenu.style.display === "block") ? "none" : "block";
+            }
+        });
+    });
+</script>
