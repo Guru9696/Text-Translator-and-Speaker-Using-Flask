@@ -1,3 +1,5 @@
 Flask
 Flask-CORS
-
+translate
+gtts
+playsound
