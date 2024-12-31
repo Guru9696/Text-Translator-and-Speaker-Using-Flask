@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Translation App - Indian Languages</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Speech to Text and Translation App</h2>
+
+    <!-- Dropdown for selecting the source language -->
+    <label for="sourceLang">Select Source Language: </label>
+    <select id="sourceLang">
+        <option value="hi">Hindi</option>
+        <option value="bn">Bengali</option>
+        <option value="te">Telugu</option>
+        <option value="mr">Marathi</option>
+        <option value="ta">Tamil</option>
+        <option value="gu">Gujarati</option>
+        <option value="pa">Punjabi</option>
+        <option value="ur">Urdu</option>
+        <option value="ml">Malayalam</option>
+        <option value="or">Odia</option>
+        <option value="kn">Kannada</option>
+        <option value="as">Assamese</option>
+        <option value="mai">Maithili</option>
+        <option value="sa">Sanskrit</option>
+        <option value="kok">Konkani</option>
+        <option value="sd">Sindhi</option>
+        <!-- Add more languages as needed -->
+    </select>
+
+    <!-- Dropdown for selecting the target language -->
+    <label for="targetLang">Select Target Language: </label>
+    <select id="targetLang">
+        <option value="hi">Hindi</option>
+        <option value="bn">Bengali</option>
+        <option value="te">Telugu</option>
+        <option value="mr">Marathi</option>
+        <option value="ta">Tamil</option>
+        <option value="gu">Gujarati</option>
+        <option value="pa">Punjabi</option>
+        <option value="ur">Urdu</option>
+        <option value="ml">Malayalam</option>
+        <option value="or">Odia</option>
+        <option value="kn">Kannada</option>
+        <option value="as">Assamese</option>
+        <option value="mai">Maithili</option>
+        <option value="sa">Sanskrit</option>
+        <option value="kok">Konkani</option>
+        <option value="sd">Sindhi</option>
+        <!-- Add more languages as needed -->
+    </select>
+
+    <br><br>
+
+    <button id="micButton">Start Speaking</button>
+    <div id="recognizedText">Recognized Speech: </div>
+    <div id="translatedText">Translated Text: </div>
+
+    <script>
+        // Initialize Speech Recognition API
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        const micButton = document.getElementById("micButton");
+        const recognizedTextElement = document.getElementById("recognizedText");
+        const translatedTextElement = document.getElementById("translatedText");
+
+        // Handle the start button click to start speech recognition
+        micButton.onclick = function() {
+            // Get the selected source language from the dropdown
+            const sourceLang = document.getElementById("sourceLang").value;
+            recognition.lang = sourceLang;  // Set the source language dynamically
+
+            recognition.start();
+            micButton.disabled = true;  // Disable button while recording
+        };
+
+        recognition.onstart = function() {
+            recognizedTextElement.textContent = "Recognizing speech...";
+        };
+
+        // Capture recognized speech
+        recognition.onresult = function(event) {
+            const speechText = event.results[0][0].transcript;
+            recognizedTextElement.textContent = "Recognized Speech: " + speechText;
+
+            // Get the selected target language from the dropdown
+            const targetLang = document.getElementById("targetLang").value;
+
+            // Translate the recognized speech
+            translateText(speechText, recognition.lang, targetLang);
+        };
+
+        // Handle speech recognition errors
+        recognition.onerror = function(event) {
+            console.error("Speech recognition error: ", event.error);
+            recognizedTextElement.textContent = "Speech recognition error: " + event.error;
+        };
+
+        // Stop recognition when it's finished
+        recognition.onend = function() {
+            micButton.disabled = false;  // Enable button after recognition ends
+        };
+
+        async function translateText(text, sourceLang, targetLang) {
+    try {
+        console.log("Recognized Speech: ", text);  // Log the recognized speech
+
+        // Check if the text is empty or invalid
+        if (!text.trim()) {
+            console.error("No text to translate.");
+            translatedTextElement.textContent = "No text to translate.";
+            return;
+        }
+
+        // API request to a different LibreTranslate server for translation
+        const response = await fetch('https://libretranslate.com/translate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                q: text,
+                source: sourceLang,
+                target: targetLang,
+            }),
+        });
+
+        // Log the response from the API
+        const data = await response.json();
+        console.log("API Response: ", data);  // Log the full API response
+
+        // Handle successful translation response
+        if (response.ok && data.translatedText) {
+            translatedTextElement.textContent = "Translated Text: " + data.translatedText;
+            speakTranslation(data.translatedText, targetLang);
+        } else {
+            throw new Error("Translation failed. No translated text found.");
+        }
+    } catch (error) {
+        console.error("Translation error: ", error);
+        translatedTextElement.textContent = "Translation failed.";
+    }
+}
+
+
+        // Convert the translated text into speech
+        function speakTranslation(text, language) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = language;
+            window.speechSynthesis.speak(utterance);
+        }
+        
+    </script>
+</body>
+</html>

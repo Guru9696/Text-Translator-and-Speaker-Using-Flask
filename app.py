@@ -94,7 +94,34 @@ def global_translate():
 
 @app.route('/digital')
 def digital():
-    return "Digital Page"
+    return render_template('digital.html')
+
+
+@app.route('/process_speech', methods=['POST'])
+def process_speech():
+    data = request.json
+    text = data['text']
+    source_lang = data['sourceLang']
+    destination_lang = data['destinationLang']
+
+    if not text:
+        return jsonify({'error': 'No text provided'}), 400
+
+    # Translate the text from the source language to the destination language
+    translator = Translator(from_lang=source_lang, to_lang=destination_lang)
+    translated_text = translator.translate(text)
+
+    # Convert the translated text to speech
+    audio_filename = ''.join(random.choices(string.ascii_letters + string.digits, k=10)) + '.mp3'
+    audio_file = os.path.join(app.static_folder, audio_filename)
+
+    # Convert translated text to speech using gTTS
+    tts = gtts.gTTS(translated_text, lang=destination_lang)
+    tts.save(audio_file)
+
+    # Return the URL of the audio file
+    audio_url = f'http://localhost:5000/static/{audio_filename}'
+    return jsonify({'audioUrl': audio_url})
 
 
 if __name__ == '__main__':

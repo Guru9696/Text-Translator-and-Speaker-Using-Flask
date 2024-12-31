@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to Material Icons CDN -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        .frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            margin-top: -200px;
+            margin-left: -200px;
+            border-radius: 2px;
+            box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            background: #27ae60;
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Microphone icon styling */
+        .mic-icon {
+            font-size: 48px;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+
+
+.ring {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 160px;
+  left: 160px;
+}
+.ring .dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: 40px;
+  left: 40px;
+}
+.ring .dot .fill {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50px;
+}
+
+.ring-1 .fill {
+  -webkit-animation: pulsate 2s ease-in-out 0.3333333333s alternate infinite both;
+          animation: pulsate 2s ease-in-out 0.3333333333s alternate infinite both;
+}
+.ring-1 .dot-1 {
+  transform: translate3d(0, -40px, 0) rotate(0deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-2 {
+  transform: translate3d(0, -40px, 0) rotate(20deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-3 {
+  transform: translate3d(0, -40px, 0) rotate(40deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-4 {
+  transform: translate3d(0, -40px, 0) rotate(60deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-5 {
+  transform: translate3d(0, -40px, 0) rotate(80deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-6 {
+  transform: translate3d(0, -40px, 0) rotate(100deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-7 {
+  transform: translate3d(0, -40px, 0) rotate(120deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-8 {
+  transform: translate3d(0, -40px, 0) rotate(140deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-9 {
+  transform: translate3d(0, -40px, 0) rotate(160deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-10 {
+  transform: translate3d(0, -40px, 0) rotate(180deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-11 {
+  transform: translate3d(0, -40px, 0) rotate(200deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-12 {
+  transform: translate3d(0, -40px, 0) rotate(220deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-13 {
+  transform: translate3d(0, -40px, 0) rotate(240deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-14 {
+  transform: translate3d(0, -40px, 0) rotate(260deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-15 {
+  transform: translate3d(0, -40px, 0) rotate(280deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-16 {
+  transform: translate3d(0, -40px, 0) rotate(300deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-17 {
+  transform: translate3d(0, -40px, 0) rotate(320deg);
+  transform-origin: 0 40px;
+}
+.ring-1 .dot-18 {
+  transform: translate3d(0, -40px, 0) rotate(340deg);
+  transform-origin: 0 40px;
+}
+
+
+.ring-2 .fill {
+  -webkit-animation: pulsate 2s ease-in-out 0.6666666667s alternate infinite both;
+          animation: pulsate 2s ease-in-out 0.6666666667s alternate infinite both;
+}
+.ring-2 .dot-1 {
+  transform: translate3d(0, -51px, 0) rotate(0deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-2 {
+  transform: translate3d(0, -51px, 0) rotate(15deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-3 {
+  transform: translate3d(0, -51px, 0) rotate(30deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-4 {
+  transform: translate3d(0, -51px, 0) rotate(45deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-5 {
+  transform: translate3d(0, -51px, 0) rotate(60deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-6 {
+  transform: translate3d(0, -51px, 0) rotate(75deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-7 {
+  transform: translate3d(0, -51px, 0) rotate(90deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-8 {
+  transform: translate3d(0, -51px, 0) rotate(105deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-9 {
+  transform: translate3d(0, -51px, 0) rotate(120deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-10 {
+  transform: translate3d(0, -51px, 0) rotate(135deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-11 {
+  transform: translate3d(0, -51px, 0) rotate(150deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-12 {
+  transform: translate3d(0, -51px, 0) rotate(165deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-13 {
+  transform: translate3d(0, -51px, 0) rotate(180deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-14 {
+  transform: translate3d(0, -51px, 0) rotate(195deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-15 {
+  transform: translate3d(0, -51px, 0) rotate(210deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-16 {
+  transform: translate3d(0, -51px, 0) rotate(225deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-17 {
+  transform: translate3d(0, -51px, 0) rotate(240deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-18 {
+  transform: translate3d(0, -51px, 0) rotate(255deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-19 {
+  transform: translate3d(0, -51px, 0) rotate(270deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-20 {
+  transform: translate3d(0, -51px, 0) rotate(285deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-21 {
+  transform: translate3d(0, -51px, 0) rotate(300deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-22 {
+  transform: translate3d(0, -51px, 0) rotate(315deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-23 {
+  transform: translate3d(0, -51px, 0) rotate(330deg);
+  transform-origin: 0 51px;
+}
+.ring-2 .dot-24 {
+  transform: translate3d(0, -51px, 0) rotate(345deg);
+  transform-origin: 0 51px;
+}
+
+.ring-3 .fill {
+  -webkit-animation: pulsate 2s ease-in-out 1s alternate infinite both;
+          animation: pulsate 2s ease-in-out 1s alternate infinite both;
+}
+.ring-3 .dot-1 {
+  transform: translate3d(0, -62px, 0) rotate(0deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-2 {
+  transform: translate3d(0, -62px, 0) rotate(12deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-3 {
+  transform: translate3d(0, -62px, 0) rotate(24deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-4 {
+  transform: translate3d(0, -62px, 0) rotate(36deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-5 {
+  transform: translate3d(0, -62px, 0) rotate(48deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-6 {
+  transform: translate3d(0, -62px, 0) rotate(60deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-7 {
+  transform: translate3d(0, -62px, 0) rotate(72deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-8 {
+  transform: translate3d(0, -62px, 0) rotate(84deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-9 {
+  transform: translate3d(0, -62px, 0) rotate(96deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-10 {
+  transform: translate3d(0, -62px, 0) rotate(108deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-11 {
+  transform: translate3d(0, -62px, 0) rotate(120deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-12 {
+  transform: translate3d(0, -62px, 0) rotate(132deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-13 {
+  transform: translate3d(0, -62px, 0) rotate(144deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-14 {
+  transform: translate3d(0, -62px, 0) rotate(156deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-15 {
+  transform: translate3d(0, -62px, 0) rotate(168deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-16 {
+  transform: translate3d(0, -62px, 0) rotate(180deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-17 {
+  transform: translate3d(0, -62px, 0) rotate(192deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-18 {
+  transform: translate3d(0, -62px, 0) rotate(204deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-19 {
+  transform: translate3d(0, -62px, 0) rotate(216deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-20 {
+  transform: translate3d(0, -62px, 0) rotate(228deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-21 {
+  transform: translate3d(0, -62px, 0) rotate(240deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-22 {
+  transform: translate3d(0, -62px, 0) rotate(252deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-23 {
+  transform: translate3d(0, -62px, 0) rotate(264deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-24 {
+  transform: translate3d(0, -62px, 0) rotate(276deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-25 {
+  transform: translate3d(0, -62px, 0) rotate(288deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-26 {
+  transform: translate3d(0, -62px, 0) rotate(300deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-27 {
+  transform: translate3d(0, -62px, 0) rotate(312deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-28 {
+  transform: translate3d(0, -62px, 0) rotate(324deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-29 {
+  transform: translate3d(0, -62px, 0) rotate(336deg);
+  transform-origin: 0 62px;
+}
+.ring-3 .dot-30 {
+  transform: translate3d(0, -62px, 0) rotate(348deg);
+  transform-origin: 0 62px;
+}
+
+
+
+
+
+@-webkit-keyframes pulsate {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulsate {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+        /* Hide rings when animation is done */
+        .hide-rings {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="frame">
+        <!-- set google microphone symbol -->
+        <i class="material-icons mic-icon" id="mic">mic</i>
+
+    
+        <div class="ring ring-1">
+          <div class="dot dot-1">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-2">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-3">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-4">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-5">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-6">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-7">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-8">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-9">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-10">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-11">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-12">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-13">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-14">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-15">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-16">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-17">
+            <div class="fill"></div>
+          </div>
+          <div class="dot dot-18">
+            <div class="fill"></div>
+          </div>
+        </div>
+    
+      <div class="ring ring-2">
+        <div class="dot dot-1">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-2">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-3">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-4">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-5">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-6">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-7">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-8">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-9">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-10">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-11">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-12">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-13">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-14">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-15">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-16">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-17">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-18">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-19">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-20">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-21">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-22">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-23">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-24">
+          <div class="fill"></div>
+        </div>
+      </div>
+      <div class="ring ring-3">
+        <div class="dot dot-1">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-2">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-3">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-4">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-5">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-6">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-7">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-8">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-9">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-10">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-11">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-12">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-13">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-14">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-15">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-16">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-17">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-18">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-19">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-20">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-21">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-22">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-23">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-24">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-25">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-26">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-27">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-28">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-29">
+          <div class="fill"></div>
+        </div>
+        <div class="dot dot-30">
+          <div class="fill"></div>
+        </div>
+      </div>
+        </div>
+
+    <script>
+        // JavaScript to start animation on mic icon click
+        const micButton = document.getElementById('mic');
+        const ring = document.getElementById('ring');
+
+        micButton.addEventListener('click', function() {
+            // Start animation by displaying the rings and pulsating effect
+            ring.style.display = 'block';  // Make the ring visible
+        });
+    </script>
+</body>
+</html>
+
+

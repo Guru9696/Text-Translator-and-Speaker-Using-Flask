@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-to-Text, Translate, and Playback</title>
+    
+    <!-- Add Google Fonts for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Styling for modern look -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            margin-top: 8px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        select:focus, button:focus {
+            outline: none;
+            border-color: #5b9bd5;
+            background-color: #e1f3fd;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .audio-player {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .output-text {
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #444;
+            font-weight: 400;
+        }
+
+        .feedback {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #ff6b6b;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+
+            button, select {
+                font-size: 1.1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            select, button {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Speech-to-Text, Translate, and Playback</h1>
+    <div class="container">
+        <!-- Language Selection -->
+        <div class="form-group">
+            <label for="source-lang">Source Language:</label>
+            <select id="source-lang">
+                <option value="en">English</option>
+                <option value="mr">Marathi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <!-- Add more languages here -->
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="destination-lang">Destination Language:</label>
+            <select id="destination-lang">
+                <option value="en">English</option>
+                <option value="mr">Marathi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <!-- Add more languages here -->
+            </select>
+        </div>
+
+        <!-- Button to start recording -->
+        <button id="start-recording">Start Recording</button>
+
+        <!-- Displaying the transcribed text -->
+        <p id="transcribed-text" class="output-text">Your speech will appear here...</p>
+
+        <!-- Audio element to play the generated audio -->
+        <audio id="audio-player" class="audio-player" controls></audio>
+
+        <!-- Feedback message (for errors or success) -->
+        <p id="error-message" class="feedback" style="display: none;">Error: Something went wrong...</p>
+    </div>
+
+    <script>
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US'; // Default language for recognition
+        recognition.interimResults = false; // Don't show interim results
+
+        // Start recording when the user clicks the button
+        document.getElementById('start-recording').addEventListener('click', function() {
+            recognition.start();
+            document.getElementById('transcribed-text').textContent = "Listening...";
+            document.getElementById('error-message').style.display = 'none';
+        });
+
+        // When speech is recognized, send it to the backend
+        recognition.onresult = async function(event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById('transcribed-text').textContent = `You said: ${transcript}`;
+
+            // Get selected languages
+            const sourceLang = document.getElementById('source-lang').value;
+            const destinationLang = document.getElementById('destination-lang').value;
+
+            // Send the recognized text and language details to Flask backend
+            try {
+                const response = await fetch('/process_speech', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        text: transcript,
+                        sourceLang: sourceLang,
+                        destinationLang: destinationLang 
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Play the returned audio file
+                    const audioPlayer = document.getElementById('audio-player');
+                    audioPlayer.src = data.audioUrl;
+                    audioPlayer.play();
+                } else {
+                    showErrorMessage();
+                }
+            } catch (error) {
+                showErrorMessage();
+                console.error('Error:', error);
+            }
+        };
+
+        // Show error message
+        function showErrorMessage() {
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        // If there's an error during recognition, display it
+        recognition.onerror = function(event) {
+            showErrorMessage();
+            console.error('Speech recognition error', event);
+        };
+    </script>
+</body>
+</html>
