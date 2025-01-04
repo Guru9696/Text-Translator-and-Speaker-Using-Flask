@@ -127,7 +127,43 @@ def translate_text1():
     return jsonify({'translatedText': translated_text})
 
 
+@app.route('/try')
+def try1():
+    return render_template('try.html')
 
+@app.route('/tran1', methods=['POST'])
+def translate_text():
+
+    data = request.get_json()
+    text = data['text']
+    from_lang = data['fromLang']
+    to_lang = data['toLang']
+
+    # Split the text into chunks of 200 words
+    words = text.split()
+    chunk_size = 1000
+    chunks = [words[i:i + chunk_size] for i in range(0, len(words), chunk_size)]
+
+    # Translate each chunk and combine them
+    translated_chunks = []
+    translator = Translator(from_lang=from_lang, to_lang=to_lang)
+    for chunk in chunks:
+        chunk_text = ' '.join(chunk)
+        translated_chunk = translator.translate(chunk_text)
+        translated_chunks.append(translated_chunk)
+
+    translated_text = ' '.join(translated_chunks)
+    
+    # Save the translated text for playback
+    global translated_text_global1
+    translated_text_global1 = translated_text
+
+    return jsonify({'translatedText': translated_text})
+
+
+@app.route('/try2')
+def try2():
+    return render_template('try2.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
