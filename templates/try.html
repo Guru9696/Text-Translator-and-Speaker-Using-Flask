@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-to-Text with Language Selection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* General styling for the page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1000px;
+            gap: 30px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 48%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            margin-top: 8px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        select:focus, button:focus {
+            outline: none;
+            border-color: #5b9bd5;
+            background-color: #e1f3fd;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .output-text {
+            font-size: 1em;
+            margin-top: 20px;
+            color: #444;
+            font-weight: 400;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .feedback {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #ff6b6b;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Speech-to-Text with Language Selection</h1>
+    <div class="main-container">
+        <!-- Source Language & Speech Recognition -->
+        <div class="container">
+            <div class="form-group">
+                <label for="source-lang">Select Source Language:</label>
+                <select id="source-lang">
+                    <option value="en-US">English</option>
+                    <option value="mr-IN">Marathi</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="fr-FR">French</option>
+                    <!-- Add more languages as needed -->
+                </select>
+            </div>
+
+            <!-- Buttons for start and stop recording -->
+            <button id="start-recording">Start Recording</button>
+            <button id="stop-recording" style="display: none;">Stop Recording</button>
+
+            <!-- Displaying the transcribed text -->
+            <p id="transcribed-text" class="output-text">Your speech will appear here...</p>
+
+            <!-- Feedback message (for errors or success) -->
+            <p id="error-message" class="feedback" style="display: none;">Error: Something went wrong...</p>
+        </div>
+
+        <!-- Destination Language & Process Button -->
+        <div class="container">
+            <div class="form-group">
+                <label for="destination-lang">Select Destination Language:</label>
+                <select id="destination-lang">
+                    <option value="en-US">English</option>
+                    <option value="mr-IN">Marathi</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="fr-FR">French</option>
+                    <!-- Add more languages as needed -->
+                </select>
+            </div>
+
+            <!-- Button to process the transcribed text -->
+            <button id="process-text">Process Translated Text</button>
+
+            <!-- Display translated text -->
+            <p id="translated-text" class="output-text">Processed text will appear here...</p>
+            <button id="speakBtn"><i class="fas fa-volume-up"></i> </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize SpeechRecognition API
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = true;  // Keep listening continuously
+        recognition.interimResults = true;  // Get partial results (immediate feedback)
+
+        let fullText = '';  // Variable to store the entire transcribed text
+        let currentLine = '';  // Variable to store the current line
+
+        // Event listener for "Start Recording" button
+        document.getElementById('start-recording').addEventListener('click', function () {
+            const selectedLang = document.getElementById('source-lang').value;
+            recognition.lang = selectedLang;  // Set the selected language for recognition
+
+            recognition.start(); // Start listening
+            document.getElementById('transcribed-text').textContent = "Listening...";
+            document.getElementById('start-recording').style.display = 'none';  // Hide start button
+            document.getElementById('stop-recording').style.display = 'inline-block';  // Show stop button
+            document.getElementById('error-message').style.display = 'none'; // Hide error message
+        });
+
+        // Event listener for "Stop Recording" button
+        document.getElementById('stop-recording').addEventListener('click', function () {
+            recognition.stop();  // Stop listening
+            document.getElementById('start-recording').style.display = 'inline-block';  // Show start button
+            document.getElementById('stop-recording').style.display = 'none';  // Hide stop button
+        });
+
+        // Handle the result from speech recognition
+        recognition.onresult = function (event) {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+
+            // If interim result (incomplete), update the current line
+            if (event.results[event.results.length - 1].isFinal) {
+                currentLine = transcript.trim();  // Finalize the current line
+                fullText += currentLine + '\n';  // Append to full text with newline
+                document.getElementById('transcribed-text').textContent = fullText;  // Display the updated text
+            }
+        };
+
+        // Handle errors
+        recognition.onerror = function (event) {
+            console.error('Speech recognition error', event.error); // Log the error for debugging
+
+            if (event.error === 'no-speech') {
+                document.getElementById('error-message').textContent = 'No speech detected. Please try again.';
+            } else {
+                document.getElementById('error-message').textContent = `Error occurred: ${event.error}`;
+            }
+            
+            document.getElementById('error-message').style.display = 'block'; // Show error message
+        };
+
+        // Event listener to stop recognition when the recording is stopped
+        recognition.onend = function () {
+            // Once recognition ends (after stop button click), log all transcribed text to the console
+            console.log("Complete Recognized Text:\n", fullText);
+            // You can also display it in the text area or do other actions
+        };
+
+        // Event listener for "Process Translated Text" button
+        document.getElementById('process-text').addEventListener('click', function () {
+            const destinationLang = document.getElementById('destination-lang').value;
+            const transcribedText = fullText;
+            const SourceLang = document.getElementById('source-lang').value;
+
+            if (transcribedText) {
+
+                 // Send the transcribed text to the server for translation
+            fetch('/tran1', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: transcribedText,
+                    fromLang: SourceLang, // Set source language, it can be dynamic as needed
+                    toLang: destinationLang
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display translated text on the page
+                document.getElementById('translated-text').textContent = data.translatedText;
+                
+                document.getElementById('speakBtn').addEventListener('click', () => {
+        const textInput = data.translatedText;
+        const languageSelect = document.getElementById('destination-lang').value;
+        
+        if (textInput) {
+            const speech = new SpeechSynthesisUtterance(textInput);
+            speech.lang = languageSelect; // Set the language based on user selection
+            window.speechSynthesis.speak(speech);
+        } else {
+            alert('Please Translate Some Text.');
+        }
+    });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+     
+        } else {
+            alert('Please start recording then translate.');
+        }
+
+           
+        });
+    </script>
+</body>
+</html>

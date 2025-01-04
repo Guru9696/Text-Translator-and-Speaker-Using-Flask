@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - Multilingual</title>
+</head>
+<body>
+    <h1>Text to Speech Example (Multilingual)</h1>
+    <label for="language-select">Choose a language:</label>
+    <select id="language-select">
+        <option value="en-US">English (US)</option>
+        <option value="es-ES">Spanish (Spain)</option>
+        <option value="fr-FR">French (France)</option>
+        <option value="de-DE">German (Germany)</option>
+        <option value="hi-IN">Hindi (India)</option>
+        <option value="mr-IN">Marathi (India)</option>
+        <!-- Add more languages as needed -->
+    </select>
+    <br>
+    <textarea id="textInput" rows="4" cols="50" placeholder="Enter text here..."></textarea>
+    <br>
+    <button id="speakBtn">Speak</button>
+
+    <script>document.getElementById('speakBtn').addEventListener('click', () => {
+        const textInput = document.getElementById('textInput').value;
+        const languageSelect = document.getElementById('language-select').value;
+        
+        if (textInput) {
+            const speech = new SpeechSynthesisUtterance(textInput);
+            speech.lang = languageSelect; // Set the language based on user selection
+            window.speechSynthesis.speak(speech);
+        } else {
+            alert('Please enter some text.');
+        }
+    });
+    </script>
+</body>
+</html>
