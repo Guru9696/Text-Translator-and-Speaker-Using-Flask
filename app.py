@@ -96,32 +96,37 @@ def global_translate():
 def digital():
     return render_template('digital.html')
 
+@app.route('/digital1', methods=['POST'])
+def translate_text1():
 
-@app.route('/process_speech', methods=['POST'])
-def process_speech():
-    data = request.json
+
+    data = request.get_json()
     text = data['text']
-    source_lang = data['sourceLang']
-    destination_lang = data['destinationLang']
+    from_lang = data['fromLang']
+    to_lang = data['toLang']
 
-    if not text:
-        return jsonify({'error': 'No text provided'}), 400
+    # Split the text into chunks of 200 words
+    words = text.split()
+    chunk_size = 1000
+    chunks = [words[i:i + chunk_size] for i in range(0, len(words), chunk_size)]
 
-    # Translate the text from the source language to the destination language
-    translator = Translator(from_lang=source_lang, to_lang=destination_lang)
-    translated_text = translator.translate(text)
+    # Translate each chunk and combine them
+    translated_chunks = []
+    translator = Translator(from_lang=from_lang, to_lang=to_lang)
+    for chunk in chunks:
+        chunk_text = ' '.join(chunk)
+        translated_chunk = translator.translate(chunk_text)
+        translated_chunks.append(translated_chunk)
 
-    # Convert the translated text to speech
-    audio_filename = ''.join(random.choices(string.ascii_letters + string.digits, k=10)) + '.mp3'
-    audio_file = os.path.join(app.static_folder, audio_filename)
+    translated_text = ' '.join(translated_chunks)
+    
+    # Save the translated text for playback
+    global translated_text_global1
+    translated_text_global1 = translated_text
 
-    # Convert translated text to speech using gTTS
-    tts = gtts.gTTS(translated_text, lang=destination_lang)
-    tts.save(audio_file)
+    return jsonify({'translatedText': translated_text})
 
-    # Return the URL of the audio file
-    audio_url = f'http://localhost:5000/static/{audio_filename}'
-    return jsonify({'audioUrl': audio_url})
+
 
 
 if __name__ == '__main__':
