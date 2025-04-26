@@ -50,3 +50,6 @@ Run the Flask app:
 - **Translate Text**: Enter text into the translation box and select the target language.
 - **Voice Translation**: Click on the microphone icon and speak. The app will display the translated text.
 
+
+## Contact
+For any inquiries or support, please contact [Your Name] at [your-email@example.com].
